@@ -159,3 +159,5 @@ audioPlayer.play().catch(error => {
 
 // Add event listener to play the next track or ad when the current one ends
 audioPlayer.addEventListener('ended', playNextTrack);
+
+//new

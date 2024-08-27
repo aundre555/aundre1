@@ -102,7 +102,9 @@ const tracks = [
     'Did It First.mp3',
     'Bood Up.mp3',
     'Like That metro.mp3',
-    'For The Streets.mp3'
+    'For The Streets.mp3',
+    '19 Die For You (Remix).m4a',
+    'Moonlight.mp3'
 ];
 
 // Shuffle the tracks array

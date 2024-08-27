@@ -108,7 +108,12 @@ const tracks = [
     'Big Poppa [Radio Edit].mp3',
     'Wait On It (feat, Bryson Tiller , Chris Brown).mp3',
     'City Girls - Act Up [Clean].mp3',
-    'President [Clean].mp3'
+    'President [Clean].mp3',
+    'GloRilla - Yeah Glo! (Clean).mp3',
+    'Last Heartbreak Song.mp3',
+    'Yes Indeed.mp3',
+    'Aston Martin Music (Clean)-Rick Ross ft Drake and Chrisette Michele.mp3',
+    'BACK OUTSIDE [Clean] (feat. Latto).mp3'
 ];
 
 // Shuffle the tracks array

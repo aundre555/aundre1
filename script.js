@@ -113,7 +113,8 @@ const tracks = [
     'Last Heartbreak Song.mp3',
     'Yes Indeed.mp3',
     'Aston Martin Music (Clean)-Rick Ross ft Drake and Chrisette Michele.mp3',
-    'BACK OUTSIDE [Clean] (feat. Latto).mp3'
+    'BACK OUTSIDE [Clean] (feat. Latto).mp3',
+    'Way 2 Sexy [Clean].mp3'
 ];
 
 // Shuffle the tracks array

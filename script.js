@@ -100,6 +100,7 @@ const tracks = [
     '04 Truth or Dare.m4a',
     'You Know How We Do It.mp3',
     'Did It First.mp3',
+    'Bood Up.mp3'
 ];
 
 // Shuffle the tracks array

@@ -127,16 +127,25 @@ audioPlayer.oncanplaythrough = function() {
     console.log("Audio is ready to play:", audioPlayer.src);
 };
 
-// Variable to keep track of the current track index
+// Variable to keep track of the current track index and the count of songs played
 let currentTrackIndex = 0;
+let songsPlayed = 0;
+const songsBeforeAd = 7; // Number of songs to play before the ad
 
 // Function to play the next track in the shuffled array
 function playNextTrack() {
-    // Increment the track index, loop back to 0 if at the end
-    currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
-    // Set the source of the audio player to the next track
-    audioPlayer.src = 'music/' + tracks[currentTrackIndex];
-    // Play the next track
+    if (songsPlayed >= songsBeforeAd) {
+        // After 7 songs, play the ad
+        audioPlayer.src = 'music/Aundre1 ad.m4a';
+        songsPlayed = 0; // Reset the counter
+    } else {
+        // Play the next track
+        currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
+        audioPlayer.src = 'music/' + tracks[currentTrackIndex];
+        songsPlayed++;
+    }
+    
+    // Play the track or ad
     audioPlayer.play().catch(error => {
         console.error("Autoplay failed:", error);
     });
@@ -148,5 +157,5 @@ audioPlayer.play().catch(error => {
     console.error("Autoplay failed:", error);
 });
 
-// Add event listener to play the next track when the current one ends
+// Add event listener to play the next track or ad when the current one ends
 audioPlayer.addEventListener('ended', playNextTrack);

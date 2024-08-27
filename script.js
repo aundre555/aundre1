@@ -104,7 +104,11 @@ const tracks = [
     'Like That metro.mp3',
     'For The Streets.mp3',
     '19 Die For You (Remix).m4a',
-    'Moonlight.mp3'
+    'Moonlight.mp3',
+    'Big Poppa [Radio Edit].mp3',
+    'Wait On It (feat, Bryson Tiller , Chris Brown).mp3',
+    'City Girls - Act Up [Clean].mp3',
+    'President [Clean].mp3'
 ];
 
 // Shuffle the tracks array

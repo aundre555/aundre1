@@ -129,8 +129,20 @@ function shuffleArray(array) {
 // Shuffle the tracks
 shuffleArray(tracks);
 
-// Get the audio player element
-const audioPlayer = document.getElementById('audioPlayer');
+// Get the audio element (hidden)
+const audioPlayer = document.createElement('audio');
+audioPlayer.autoplay = true;
+audioPlayer.controls = false; // Disable built-in controls
+
+// Variables for controlling playback and tracking state
+let currentTrackIndex = 0;
+let songsPlayed = 0;
+const songsBeforeAd = 7; // Number of songs to play before the ad
+let isPlaying = false;
+
+// Get the play and pause buttons
+const playButton = document.getElementById('playButton');
+const pauseButton = document.getElementById('pauseButton');
 
 // Error handling to detect issues with loading the audio file
 audioPlayer.onerror = function() {
@@ -141,11 +153,6 @@ audioPlayer.onerror = function() {
 audioPlayer.oncanplaythrough = function() {
     console.log("Audio is ready to play:", audioPlayer.src);
 };
-
-// Variable to keep track of the current track index and the count of songs played
-let currentTrackIndex = 0;
-let songsPlayed = 0;
-const songsBeforeAd = 7; // Number of songs to play before the ad
 
 // Function to play the next track in the shuffled array
 function playNextTrack() {
@@ -159,20 +166,43 @@ function playNextTrack() {
         audioPlayer.src = 'music/' + tracks[currentTrackIndex];
         songsPlayed++;
     }
-    
-    // Play the track or ad
-    audioPlayer.play().catch(error => {
-        console.error("Autoplay failed:", error);
-    });
+    audioPlayer.play();
+    isPlaying = true;
+    playButton.style.display = 'none';
+    pauseButton.style.display = 'inline';
 }
 
-// Set the first shuffled track as the source and play it
-audioPlayer.src = 'music/' + tracks[currentTrackIndex];
-audioPlayer.play().catch(error => {
-    console.error("Autoplay failed:", error);
-});
+// Function to toggle play and pause
+function togglePlayPause() {
+    if (isPlaying) {
+        audioPlayer.pause();
+        isPlaying = false;
+        playButton.style.display = 'inline';
+        pauseButton.style.display = 'none';
+    } else {
+        audioPlayer.play();
+        isPlaying = true;
+        playButton.style.display = 'none';
+        pauseButton.style.display = 'inline';
+    }
+}
+
+// Event listener for play button
+playButton.addEventListener('click', togglePlayPause);
+
+// Event listener for pause button
+pauseButton.addEventListener('click', togglePlayPause);
+
+// Set the first shuffled track as the source
+if (tracks.length > 0) {
+    audioPlayer.src = 'music/' + tracks[currentTrackIndex];
+    isPlaying = true;
+    playButton.style.display = 'none';
+    pauseButton.style.display = 'inline';
+    audioPlayer.play();
+} else {
+    console.error("No tracks available to play.");
+}
 
 // Add event listener to play the next track or ad when the current one ends
 audioPlayer.addEventListener('ended', playNextTrack);
-
-//new

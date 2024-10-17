@@ -82,6 +82,7 @@
         <button class="dropbtn">More</button>
         <div class="dropdown-content">
             <a href="#" id="playerLink"><i class="fa-brands fa-itunes-note"></i> Player</a>
+            <a href="video.html" id="radioLink"><i class="fa-regular fa-circle-play"></i> Video</a>
             <a href="#" id="radioLink"><i class="fa-solid fa-radio"></i> Radio</a>
         </div>
     </div>
@@ -106,6 +107,11 @@
         // Handle Player button click
         document.getElementById('playerLink').addEventListener('click', function() {
             window.open('https://aundremediaplayer.netlify.app/', '_blank');
+        });
+
+           // Handle Player button click
+           document.getElementById('videoLink').addEventListener('click', function() {
+            window.open('video.html', '_blank');
         });
 
         // Handle Radio button click

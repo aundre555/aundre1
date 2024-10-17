@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aundre Video Player</title>
+    <link rel="icon" href="title.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            background-color: #000;
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .control-buttons i {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .progress-bar {
+            flex-grow: 1;
+            height: 5px;
+            background-color: #333;
+            border-radius: 5px;
+            margin: 0 20px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background-color: red;
+            border-radius: 5px;
+        }
+
+        .timer {
+            font-size: 14px;
+            color: #fff;
+            margin-left: auto;
+        }
+
+        .choose-video {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .choose-video input {
+            font-size: 16px;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .fa-up-right-and-down-left-from-center {
+            font-size: 24px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .fullscreen {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-container.fullscreen video {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        /* Dropdown Container */
+        .dropdown {
+            position: absolute;
+            top: 10px;  /* Distance from the top */
+            left: 10px; /* Distance from the left */
+            z-index: 1000;
+        }
+
+        /* Dropdown Button */
+        .dropbtn {
+            background-color: #050505;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            font-family: monospace;
+        }
+
+        /* Dropdown Content (hidden by default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 9px;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-family: monospace;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        /* Show the dropdown content on hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Change color of the dropdown button on hover */
+        .dropdown:hover .dropbtn {
+            background-color: #555;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Dropdown Menu in Top Left Corner -->
+    <div class="dropdown">
+        <button class="dropbtn">More</button>
+        <div class="dropdown-content">
+            <a href="https://aundremediaplayer.netlify.app/" id="playerLink"><i class="fa-brands fa-itunes-note"></i> Player</a>
+            <a href="video.html" id="radioLink"><i class="fa-regular fa-circle-play"></i> Video</a>
+            <a href="https://aundre555.github.io/aundre1/" id="radioLink"><i class="fa-solid fa-radio"></i> Radio</a>
+        </div>
+    </div>
+
+    <div class="choose-video">
+        <input type="file" id="choose-video-btn" accept="video/mp4,video/webm,audio/mp4,audio/m4a">
+    </div>
+
+    <div class="video-container" id="video-container">
+        <video id="video"></video>
+        <div class="controls" id="controls">
+            <div class="control-buttons">
+                <i class="fa-solid fa-backward-step" id="backward" style="color: #ffffff;"></i>
+                <i class="fa-solid fa-pause" id="play-pause" style="color: #ffffff;"></i>
+                <i class="fa-solid fa-forward-step" id="forward" style="color: #ffffff;"></i>
+            </div>
+            <div class="progress-bar" id="progress-bar">
+                <div class="progress-bar-fill" id="progress-bar-fill"></div>
+            </div>
+            <div class="timer" id="timer">00:00 / 00:00</div>
+            <i class="fa-solid fa-up-right-and-down-left-from-center" id="fullscreen-toggle" style="color: #ffffff;"></i>
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const chooseVideoBtn = document.getElementById('choose-video-btn');
+        const playPauseBtn = document.getElementById('play-pause');
+        const fullscreenToggle = document.getElementById('fullscreen-toggle');
+        const progressBar = document.getElementById('progress-bar');
+        const progressBarFill = document.getElementById('progress-bar-fill');
+        const timer = document.getElementById('timer');
+        const videoContainer = document.getElementById('video-container');
+        const controls = document.getElementById('controls');
+
+        let controlsTimeout;
+
+        // Show controls when mouse is near the bottom of the video
+        videoContainer.addEventListener('mousemove', (e) => {
+            if (e.clientY > videoContainer.clientHeight - 100) {
+                showControls();
+                clearTimeout(controlsTimeout);
+                controlsTimeout = setTimeout(hideControls, 2000); // Hide after 2 seconds of inactivity
+            }
+        });
+
+        function showControls() {
+            controls.style.opacity = '1';
+            controls.style.visibility = 'visible';
+        }
+
+        function hideControls() {
+            controls.style.opacity = '0';
+            controls.style.visibility = 'hidden';
+        }
+
+        // Choose video file from file input (restricted to mp4, m4a, webm)
+        chooseVideoBtn.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            const allowedFormats = ['video/mp4', 'video/webm', 'audio/mp4', 'audio/m4a'];
+
+            if (file && allowedFormats.includes(file.type)) {
+                const videoURL = URL.createObjectURL(file);
+                video.src = videoURL;
+                video.load();
+
+                // Play the video automatically after it's loaded
+                video.play();
+
+                // Update play/pause button icon to pause state
+                playPauseBtn.classList.remove('fa-play');
+                playPauseBtn.classList.add('fa-pause');
+            } else {
+                alert('Unsupported format! Please choose an MP4, M4A, or WebM file.');
+            }
+        });
+
+        // Play/Pause toggle
+        playPauseBtn.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+                playPauseBtn.classList.remove('fa-play');
+                playPauseBtn.classList.add('fa-pause');
+            } else {
+                video.pause();
+                playPauseBtn.classList.remove('fa-pause');
+                playPauseBtn.classList.add('fa-play');
+            }
+        });
+
+        // Fullscreen toggle and centering the video in fullscreen
+        fullscreenToggle.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                videoContainer.classList.add('fullscreen');
+                videoContainer.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+                videoContainer.classList.remove('fullscreen');
+            }
+        });
+
+        // Update progress bar and timer
+        video.addEventListener('timeupdate', () => {
+            const progressPercent = (video.currentTime / video.duration) * 100;
+            progressBarFill.style.width = progressPercent + '%';
+
+            // Update timer
+            const currentMinutes = Math.floor(video.currentTime / 60);
+            const currentSeconds = Math.floor(video.currentTime % 60);
+            const durationMinutes = Math.floor(video.duration / 60);
+            const durationSeconds = Math.floor(video.duration % 60);
+
+            timer.textContent = `${currentMinutes}:${currentSeconds.toString().padStart(2, '0')} / ${durationMinutes}:${durationSeconds.toString().padStart(2, '0')}`;
+        });
+
+        // Skip forward 10 seconds
+        document.getElementById('forward').addEventListener('click', () => {
+            video.currentTime += 10;
+        });
+
+        // Skip backward 10 seconds
+        document.getElementById('backward').addEventListener('click', () => {
+            video.currentTime -= 10;
+        });
+
+        // Update progress bar on click
+        progressBar.addEventListener('click', (e) => {
+            const newTime = (e.offsetX / progressBar.clientWidth) * video.duration;
+            video.currentTime = newTime;
+        });
+    </script>
+</body>
+</html>

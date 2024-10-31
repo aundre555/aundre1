@@ -116,7 +116,8 @@ const tracks = [
     'BACK OUTSIDE [Clean] (feat. Latto).mp3',
     'Way 2 Sexy [Clean].mp3',
     'Young Nudy - Impala [Clean].m4a',
-    'saweetie - NANi [Clean].mp3'
+    'saweetie - NANi [Clean].mp3',
+    'São Paulo.m4a'
 ];
 
 // Shuffle the tracks array
